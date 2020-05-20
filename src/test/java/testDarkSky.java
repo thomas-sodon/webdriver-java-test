@@ -45,7 +45,7 @@ public class testDarkSky {
         long diff = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
         Assert.assertTrue(diff <= 120);
 
-        //Test that all subsequent differences are two hours
+        //Test that all subsequent differences are exactly two hours
         Date previousDate = dateList.get(1);
         for(int i=2;i<dateList.size();i++){
             Assert.assertNotNull(dateList.get(i));
@@ -64,7 +64,7 @@ public class testDarkSky {
         Assert.assertTrue(!temps.isEmpty());
 
         Collections.sort(temps);
-        
+
         Integer currentTemp = mainPage.getCurrentTemp();
         Assert.assertTrue(currentTemp >= temps.get(0));
         Assert.assertTrue(currentTemp <= temps.get(temps.size()-1));

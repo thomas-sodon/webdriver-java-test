@@ -59,14 +59,15 @@ public class MainPage {
         for(WebElement element: times){
             String time = element.getText();
             Date date;
-            if(time.equals("Now")) {
+            if("Now".equals(time)) {
                 date = new Date();
             }else {
+                if ("12am".equals(time) || "1am".equals(time)) {
+                    calendar.add(Calendar.DAY_OF_YEAR, 1);
+                    dateString = (calendar.get(Calendar.MONTH)+1)+" "+calendar.get(Calendar.DAY_OF_MONTH)+" "+calendar.get(Calendar.YEAR);
+                }
+
                 try {
-                    if ("12am".equals(time) || "1am".equals(time)) {
-                        calendar.add(Calendar.DAY_OF_YEAR, 1);
-                        dateString = (calendar.get(Calendar.MONTH)+1)+" "+calendar.get(Calendar.DAY_OF_MONTH)+" "+calendar.get(Calendar.YEAR);
-                    }
                     date = sdf.parse(dateString+ " " + time);
                 } catch (ParseException e) {
                     throw new WebDriverException(e);
