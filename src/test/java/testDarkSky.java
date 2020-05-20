@@ -35,13 +35,25 @@ public class testDarkSky {
     @Test
     public void testTimeLineTimes(){
         List<Date> dateList = mainPage.getTimeLineTimes();
-        Assert.assertTrue(!dateList.isEmpty());
+        Assert.assertEquals(12,dateList.size());
 
-        Date previousDate = dateList.get(0);
-        for(int i=1;i<dateList.size();i++){
-            long diffInMillies = Math.abs(dateList.get(i).getTime() - previousDate.getTime());
-            long diff = TimeUnit.HOURS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+        //Test that the difference between now and the first time is less than or equal to 120 minutes
+        Assert.assertNotNull(dateList.get(0));
+        Assert.assertNotNull(dateList.get(1));
+
+        long diffInMillies = Math.abs(dateList.get(1).getTime() - dateList.get(0).getTime());
+        long diff = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
+        Assert.assertTrue(diff <= 120);
+
+        //Test that all subsequent differences are two hours
+        Date previousDate = dateList.get(1);
+        for(int i=2;i<dateList.size();i++){
+            Assert.assertNotNull(dateList.get(i));
+
+            diffInMillies = Math.abs(dateList.get(i).getTime() - previousDate.getTime());
+            diff = TimeUnit.HOURS.convert(diffInMillies, TimeUnit.MILLISECONDS);
             Assert.assertEquals(2,diff);
+
             previousDate = dateList.get(i);
         }
     }
@@ -49,7 +61,10 @@ public class testDarkSky {
     @Test
     public void testCurrentTemperature(){
         List<Integer> temps = mainPage.getTemps();
+        Assert.assertTrue(!temps.isEmpty());
+
         Collections.sort(temps);
+        
         Integer currentTemp = mainPage.getCurrentTemp();
         Assert.assertTrue(currentTemp >= temps.get(0));
         Assert.assertTrue(currentTemp <= temps.get(temps.size()-1));
